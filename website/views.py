@@ -7,6 +7,16 @@ views = Blueprint('views', __name__)
 def home():
     return render_template('home.html')
 
+# provide user with form to sign up
+@views.route("/signup")
+def signup():
+    return render_template("signup.html")
+
+
+@views.route('/login')
+def login():
+    return render_template('login.html')
+
 # index page
 @views.route('/index')
 def index():
@@ -35,12 +45,6 @@ def get_user(id):
 
     # return {"name": person.name, "city": person.city, "locations": person.locations}
     return render_template("userInquiry.html", result=person)
-
-
-# provide user with form to sign up
-@views.route("/signup")
-def signup():
-    return render_template("signup.html")
 
 
 # receives data from the form and adds to DB
