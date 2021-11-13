@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title style="color:white">Welcome to the coffee lover user's index!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+</head>
+
+<body style="background-color:black;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Menu</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" id="index" href="/">Home </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="shops" href="/shops">Coffee Shops</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                    View More
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/users">Our users</a>
+                    <a class="dropdown-item" href="/form">Sign up</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/form_shops">Add a shops</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <div class="container-fluid">
+    <h1 style="color:white; font-size=300%;">Welcome to the coffee lover user's index!</h1>
+    <div style="color:white">There are currently {{users}} registered users, join us today!</div>
+    </div>
+
+    <div class="container-fluid">
+        {% for user in lstOfUsers %}
+            <p style="color:white"> {{ user.name }}</p>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

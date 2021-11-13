@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% extends "base.html" %} {% block title %} Home {% endblock %}
+    <meta charset="UTF-8">
+    <title style="color:white; size=300%;">Fill this form to add a user</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+</head>
+<body style="background-color:black">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Menu</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://127.0.0.1:5000/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                    Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <form action="/data" method = "POST">
+        <p style="color:white">Name <input type = "text" name = "name" /></p>
+        <p style="color:white">City <input type = "text" name = "city" /></p>
+        <p style="color:white">Favorite Coffee Locations <input type = "text" name = "locations" /></p>
+        <p style="color:white">Choose a username <input type = "text" name = "username" /></p>
+        <p><input type = "submit" value = "submit" /></p>
+    </form>
+</body>
+</html>
