@@ -2,13 +2,10 @@
 {% block title %} Home {% endblock %}
 {% block content%}
 <div class="container-fluid">
-    <h1 style="color:white; font-size=300%;">Welcome to the coffee lover user's index!</h1>
-    <div style="color:white">There are currently {{users}} registered users, join us today!</div>
+    <h1 style="color:white; font-size=300%;">This is your home page!</h1>
+
 </div>
 
-<div class="container-fluid">
-    {% for user in lstOfUsers %}
-    <p style="color:white"> {{ user.name }}</p>
-    {% endfor %}
-</div>
+<h1 align="center">Your favorite coffee shops</h1>
+
 {% endblock%}
