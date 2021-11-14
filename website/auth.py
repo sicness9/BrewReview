@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
+from flask_login import login_user, login_required, logout_user, current_user
+
 
 auth = Blueprint('auth', __name__)
 
@@ -8,14 +11,33 @@ auth = Blueprint('auth', __name__)
 #login
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        #verify that the user exists in db
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password, password): #check if password entered equals password in db for this user
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True) #(remember=True)unless server restarts or user clears cache/logout will stay signed in
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist', category='error')
+    return render_template('login.html', user=current_user)
 
 
+#send user to sign in page after sign out
 @auth.route('/logout')
+@login_required #cannot access this route unless user is logged in
 def logout():
-    return "<p>Logout</p>"
+    logout_user()
+    return redirect(url_for('auth.login'))
 
 
+#sign up function
 @auth.route('/signup', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -24,7 +46,10 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        if len(email) < 4:
+        user = User.query.filter_by(email=email).first() #check if email already exists in DB
+        if user:
+            flash('This email already exists', category='error')
+        elif len(email) < 4:
             flash('Email must be greater than 3 characters', category='error')
         elif len(name) < 2:
             flash('Name must be greater than 1 character', category='error')
@@ -36,10 +61,11 @@ def sign_up():
             new_user = User(email=email, name=name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+            # login_user(user, remember=True)
             flash('Account created successfully!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.main'))
 
-    return render_template('signup.html')
+    return render_template('signup.html', user=current_user)
 
 
 #After first step of gathering email and password // ask these questions on next screen before account is created
