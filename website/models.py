@@ -1,7 +1,7 @@
 from . import db
 from flask_login import UserMixin
 
-# db.Model.metadata.reflect(db.engine)
+#db.Model.metadata.reflect(db.engine)
 
 # helper table
 locationsTable = db.Table('locations',
@@ -14,6 +14,8 @@ class Shops(db.Model):
     __tablename__ = 'shops'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    rating = db.Column(db.Float)
 
     def __repr__(self):
         return f"{self.name} - {self.rating}"
