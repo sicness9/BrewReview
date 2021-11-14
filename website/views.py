@@ -1,11 +1,21 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash, redirect , url_for
+from flask_login import login_required, current_user
+from . import db
+from .models import User, Shops, locationsTable
 
 views = Blueprint('views', __name__)
 
 
 @views.route('/')
+def main():
+    users = len(User.query.all())
+    return render_template('main.html', user=current_user, users=users)
+
+
+@views.route('/home')
+@login_required
 def home():
-    return render_template('home.html')
+    return render_template('home.html', user=current_user)
 
 
 # index page
@@ -13,7 +23,7 @@ def home():
 def index():
     count = len(User.query.all())
     people = User.query.all()
-    return render_template("index.html", users=count, lstOfUsers=people)
+    return render_template("index.html", users=count, lstOfUsers=people, user=current_user)
 
 
 # list all of current users
@@ -26,7 +36,7 @@ def get_users():
     # people_data = {'name': person.name, 'city': person.city, 'locations': person.locations}
     # output.append(people_data)
 
-    return render_template("usersPage.html", lstOfUsers=people)
+    return render_template("usersPage.html", lstOfUsers=people, user=current_user)
     # {"Users": output}
 
 
@@ -36,10 +46,7 @@ def get_user(id):
     person = User.query.get_or_404(id)
 
     # return {"name": person.name, "city": person.city, "locations": person.locations}
-    return render_template("userInquiry.html", result=person)
-
-
-
+    return render_template("userInquiry.html", result=person, user=current_user)
 
 
 # add a user via JSON input
@@ -63,51 +70,68 @@ def del_user(id):
     return {"Message": "Account Deleted"}
 
 
-######### begin location section #########
+######### begin shops section #########
 
 # view the shop location index
 @views.route('/shops')
 def shop_index():
-    count = len(Location.query.all())
-    shops = Location.query.all()
-    return render_template("shopIndex.html", shops=count, lstOfShops=shops)
+    count = len(Shops.query.all())
+    shops = Shops.query.all()
+    return render_template("shopIndex.html", shops=count, lstOfShops=shops, user=current_user)
 
 
 #add new shops via JSON
 @views.route('/shops', methods=['POST'])
 def add_shop():
-    shop = Location(name=request.json['name'], rating=request.json['rating'], loc_id=request.json['loc_id'])
+    shop = Shops(name=request.json['name'], rating=request.json['rating'], loc_id=request.json['loc_id'])
     db.session.add(shop)
     db.session.commit()
     return {'id': shop.id}
 
 
 #add new shops via a form
-@views.route("/form_shops")
+@views.route("/form_shops", methods=['GET', 'POST'])
 def shop_form():
-    return render_template("shopAddForm.html")
+    if request.method == 'POST':
+        return render_template(url_for('views.shop_added'))
+    return render_template("shopAddForm.html", user=current_user)
 
+
+@views.route('/shop_added', methods=['GET', 'POST'])
+def shop_added():
+    form_data = request.form
+    name = request.form.get('name')
+    rating = request.form.get('rating')
+
+    new_shop = Shops(name=name, rating=rating)
+
+    db.session.add(new_shop)
+    db.session.commit()
+    return render_template('shopAdded.html', form_data=form_data, user=current_user)
 
 # receives data from the form and adds to DB
-@views.route("/data_shops", methods=["POST", "GET"])
+"""""@views.route("/data_shops", methods=["POST", "GET"])
 def shop_data():
     if request.method == 'GET':
         return f"The URL /data is accessed directly. Try going to '/form' to sign up"
     if request.method == 'POST':
-        shop = Location(name=request.form['name'], rating=request.form['rating'])
+        name = request.form.get('name')
+        rating = request.form.get('rating')
+
+        new_shop = Shops(name=name, rating=rating)
         form_data = request.form
-        db.session.add(shop)
+        db.session.add(new_shop)
         db.session.commit()
-        return render_template("shopData.html", form_data=form_data)
+        return render_template("shopData.html", form_data=form_data, user=current_user)"""
 
 
 # delete a shop id
 @views.route('/shops/<id>', methods=['DELETE'])
 def del_shop(id):
-    shop = Location.query.get(id)
+    shop = Shops.query.get(id)
     if shop is None:
         return {"Error": "404 Not Found"}
     db.session.delete(shop)
     db.session.commit()
     #return {"Message": "Account Deleted"}
-    return render_template("shopDeletePage.html", shop=shop)
+    return render_template("shopDeletePage.html", shop=shop, user=current_user)
