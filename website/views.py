@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 views = Blueprint('views', __name__)
 
@@ -7,15 +7,6 @@ views = Blueprint('views', __name__)
 def home():
     return render_template('home.html')
 
-# provide user with form to sign up
-@views.route("/signup")
-def signup():
-    return render_template("signup.html")
-
-
-@views.route('/login')
-def login():
-    return render_template('login.html')
 
 # index page
 @views.route('/index')
@@ -38,6 +29,7 @@ def get_users():
     return render_template("usersPage.html", lstOfUsers=people)
     # {"Users": output}
 
+
 # search for a specific ID
 @views.route('/users/<id>')
 def get_user(id):
@@ -47,18 +39,7 @@ def get_user(id):
     return render_template("userInquiry.html", result=person)
 
 
-# receives data from the form and adds to DB
-@views.route("/data/", methods=["POST", "GET"])
-def data():
-    if request.method == 'GET':
-        return f"The URL /data is accessed directly. Try going to '/form' to sign up"
-    if request.method == 'POST':
-        user = User(name=request.form['name'], city=request.form['city'], locations=request.form['locations'],
-                    username=request.form['username'])
-        form_data = request.form
-        db.session.add(user)
-        db.session.commit()
-        return render_template("data.html", form_data=form_data)
+
 
 
 # add a user via JSON input

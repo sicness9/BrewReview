@@ -1,4 +1,14 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %}
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
 {% block content%}
-<h1>This is the home page</h1>
+<div class="container-fluid">
+    <h1 style="color:white; font-size=300%;">Welcome to the coffee lover user's index!</h1>
+    <div style="color:white">There are currently {{users}} registered users, join us today!</div>
+</div>
+
+<div class="container-fluid">
+    {% for user in lstOfUsers %}
+    <p style="color:white"> {{ user.name }}</p>
+    {% endfor %}
+</div>
 {% endblock%}

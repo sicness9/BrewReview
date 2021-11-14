@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>{% block title %} Home {% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 </head>
 
-<body style="background-color:black;">
+<body style="background-color:#4C4C4C;">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:transparent">
     <a class="navbar-brand" href="#">Menu</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -30,26 +34,48 @@
                     View More
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/users">Our users</a>
                     <a class="dropdown-item" href="/signup">Sign up</a>
+                    <a class="dropdown-item" href="/login">Log in</a>
+                    <a class="dropdown-item" href="/logout">Log out</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/form_shops">Add a shop</a>
+                    <a class="dropdown-item" href="/user">Our users</a>
                 </div>
             </li>
         </ul>
     </div>
 </nav>
 
-    <div class="container-fluid">
-    <h1 style="color:white; font-size=300%;">Welcome to the coffee lover user's index!</h1>
-    <div style="color:white">There are currently {{users}} registered users, join us today!</div>
-    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages%}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                <div class="alert alerts-danger alert-dismissable fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dimiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% else %}
+                <div class="alert alerts-success alert-dismissable fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dimiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-    <div class="container-fluid">
-        {% for user in lstOfUsers %}
-            <p style="color:white"> {{ user.name }}</p>
-        {% endfor %}
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </body>
 
