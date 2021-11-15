@@ -15,7 +15,7 @@ def main():
 @views.route('/home')
 @login_required
 def home():
-    shops = Shops.query.filter(Shops.user_id.contains(current_user.get_id()))
+    shops = Shops.query.filter(Shops.user_id == (current_user.get_id()))
     return render_template('home.html', user=current_user, shops=shops)
 
 
@@ -28,7 +28,7 @@ def index():
 
 
 # list all of current users
-@views.route('/users')
+@views.route('/aboutus')
 def about_us():
     return render_template("aboutus.html", user=current_user)
 
