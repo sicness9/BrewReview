@@ -61,14 +61,14 @@ def sign_up():
             new_user = User(email=email, name=name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
-            # login_user(user, remember=True)
+            login_user(new_user, remember=True, force=True)
             flash('Account created successfully!', category='success')
             return redirect(url_for('views.main'))
 
     return render_template('signup.html', user=current_user)
 
 
-#After first step of gathering email and password // ask these questions on next screen before account is created
+#WIP After first step of gathering email and password // ask these questions on next screen before account is created
 #@views.route("/signup2", methods=['POST'])
 #def signup2():
 #    user = User(name=request.form['name'], email=request.form['email'], password1=request.form['password1'],
