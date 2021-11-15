@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect , url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
 from . import db
 from .models import User, Shops, locationsTable
@@ -28,16 +28,9 @@ def index():
 
 # list all of current users
 @views.route('/users')
-def get_users():
-    people = User.query.all()
+def about_us():
+    return render_template("aboutus.html", user=current_user)
 
-    # output = []
-    # for person in people:
-    # people_data = {'name': person.name, 'city': person.city, 'locations': person.locations}
-    # output.append(people_data)
-
-    return render_template("usersPage.html", lstOfUsers=people, user=current_user)
-    # {"Users": output}
 
 
 # search for a specific ID
@@ -70,13 +63,33 @@ def del_user(id):
     return {"Message": "Account Deleted"}
 
 
-######### begin shops section #########
+######### begin coffee shops section #########
 
 # view the shop location index
 @views.route('/shops')
 def shop_index():
     count = len(Shops.query.all())
     shops = Shops.query.all()
+
+    #this section is a work in progress, trying to grab all the shops with duplicate names and average their ratings
+    #to display on the shop index page. Trying to figure out how to enter raw SQL using SQLAlchemy, it's not cooperating :)
+    """
+    for line in shops:
+        name = shops[1]
+
+        db.session.execute("SELECT count from Shops WHERE name = ?", (name,))
+        row = db.session.fetchone()
+        if row is None:
+            db.session.execute('INSERT INTO Shops (name, count) VALUES (?,1)', (name,))
+        else:
+            db.session.execute('UPDATE Shops SET  count = count + 1 WHERE name = ?', (name,))
+        db.session.commit()
+
+    sqlstr = 'SELECT name, count FROM Shops ORDER BY count'
+
+    for row in db.execute(sqlstr):
+        row = str(row[0], row[1])
+        print(row)"""
     return render_template("shopIndex.html", shops=count, lstOfShops=shops, user=current_user)
 
 
@@ -98,12 +111,14 @@ def shop_form():
 
 
 @views.route('/shop_added', methods=['GET', 'POST'])
+@login_required
 def shop_added():
     form_data = request.form
     name = request.form.get('name')
     rating = request.form.get('rating')
+    user_id = current_user.get_id()
 
-    new_shop = Shops(name=name, rating=rating)
+    new_shop = Shops(name=name, rating=rating, user_id=user_id)
 
     db.session.add(new_shop)
     db.session.commit()
