@@ -13,9 +13,11 @@ locationsTable = db.Table('locations',
 class Shops(db.Model):
     __tablename__ = 'shops'
     __table_args__ = {'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.Text)
     rating = db.Column(db.Float)
+    count = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):
         return f"{self.name} - {self.rating}"
@@ -34,3 +36,5 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"{self.name} - {self.email} - {self.locations}"
+
+
