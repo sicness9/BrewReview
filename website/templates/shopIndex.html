@@ -5,9 +5,22 @@
     <h1 style="color:white; font-size=300%;">Welcome to the coffee lover shop index!</h1>
     <div style="color:white">There are currently {{shops}} coffee shops in our database!</div>
 
+    </div>
+<div class="container">
+  <div class="row">
+    <div class="col" ><b>Store</b></div>
+    <div class="col"><b>Rating</b></div>
+    <div class="w-100"></div>
+    <div class="col">
         {% for user in lstOfShops %}
             <p style="color:white"> {{ user.name }}</p>
+        {% endfor %}</div>
+    <div class="col">
+        {% for user in lstOfShops %}
+            <p style="color:white"> {{ user.rating }}</p>
         {% endfor %}
     </div>
+  </div>
+</div>
 
 {% endblock %}
