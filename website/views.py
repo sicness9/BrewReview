@@ -15,7 +15,8 @@ def main():
 @views.route('/home')
 @login_required
 def home():
-    return render_template('home.html', user=current_user)
+    shops = Shops.query.filter(Shops.user_id.contains(current_user.get_id()))
+    return render_template('home.html', user=current_user, shops=shops)
 
 
 # index page
@@ -75,7 +76,7 @@ def shop_index():
     #to display on the shop index page. Trying to figure out how to enter raw SQL using SQLAlchemy, it's not cooperating :)
     """
     for line in shops:
-        name = shops[1]
+        name = db.session.fetchone()[1]
 
         db.session.execute("SELECT count from Shops WHERE name = ?", (name,))
         row = db.session.fetchone()
@@ -127,8 +128,6 @@ def shop_added():
     db.session.add(new_shop)
     db.session.commit()
     return render_template('shopAdded.html', form_data=form_data, user=current_user)
-
-
 
 
 # delete a shop id
