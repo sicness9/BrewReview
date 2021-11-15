@@ -110,6 +110,10 @@ def shop_form():
     return render_template("shopAddForm.html", user=current_user)
 
 
+#idea for adding/rating
+#ask for name of the shops then query DB to see if it exists
+#if exists prompt for a rating and then add the rating to rating column
+#maybe set rating column to be a list of ratings and then get the average rating
 @views.route('/shop_added', methods=['GET', 'POST'])
 @login_required
 def shop_added():
