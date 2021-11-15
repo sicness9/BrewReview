@@ -25,11 +25,11 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item active">
-                <a class="nav-link" id="home" href="/home">Home </a>
+                <a class="nav-link" id="home" href="/home">My Account </a>
             </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" id="index" href="/index">Index</a>
+                <a class="nav-link" id="index" href="/index">Our Users</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="shops" href="/shops">Coffee Shops</a>
@@ -39,16 +39,17 @@
                     View More
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/signup">Sign up</a>
-                    <a class="dropdown-item" href="/login">Log in</a>
                     {% if user.is_authenticated %}
                     <a class="dropdown-item" href="/logout">Log out</a>
+                    {% else %}
+                    <a class="dropdown-item" href="/signup">Sign up</a>
+                    <a class="dropdown-item" href="/login">Log in</a>
                     {% endif %}
                     <div class="dropdown-divider"></div>
                     {% if user.is_authenticated %}
                     <a class="dropdown-item" href="/form_shops">Add a shop</a>
                     {% endif %}
-                    <a class="dropdown-item" href="/user">Our users</a>
+                    <a class="dropdown-item" href="/aboutus">About This App</a>
                 </div>
             </li>
         </ul>
