@@ -128,20 +128,7 @@ def shop_added():
     db.session.commit()
     return render_template('shopAdded.html', form_data=form_data, user=current_user)
 
-# receives data from the form and adds to DB
-"""""@views.route("/data_shops", methods=["POST", "GET"])
-def shop_data():
-    if request.method == 'GET':
-        return f"The URL /data is accessed directly. Try going to '/form' to sign up"
-    if request.method == 'POST':
-        name = request.form.get('name')
-        rating = request.form.get('rating')
 
-        new_shop = Shops(name=name, rating=rating)
-        form_data = request.form
-        db.session.add(new_shop)
-        db.session.commit()
-        return render_template("shopData.html", form_data=form_data, user=current_user)"""
 
 
 # delete a shop id
