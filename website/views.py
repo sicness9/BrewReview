@@ -117,7 +117,7 @@ def shop_form():
 #maybe set rating column to be a list of ratings and then get the average rating
 @views.route('/shop_added', methods=['GET', 'POST'])
 @login_required
-def shop_added():
+def shop_add_step1():
     form_data = request.form
     name = request.form.get('name')
     rating = request.form.get('rating')
@@ -129,6 +129,11 @@ def shop_added():
     db.session.commit()
     return render_template('shopAdded.html', form_data=form_data, user=current_user)
 
+""" WIP
+@views.route('/shops_add_first_step', methods=['GET', 'POST'])
+@login_required
+def shop_add_step2():
+"""
 
 # delete a shop id
 @views.route('/shops/<id>', methods=['DELETE'])
