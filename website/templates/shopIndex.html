@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% block title %} Home {% endblock %}
 {% block content%}
-    <div class="container-fluid">
+    <div class="cover-container d-flex w-50 h-25 p-3 mx-auto flex-column">
     <h1 style="color:white; font-size=300%;">Welcome to the coffee lover shop index!</h1>
-    <div style="color:white">There are currently {{shops}} coffee shops in our database!</div>
+    <h3 class="container" style="color:white">There are currently {{shops}} coffee shops in our database!</h3>
 
     </div>
 
-<div>
-<form action="/shops/<name>/ratings" class="form" method="POST">
-    <p style="color:white">What is the name of the shop you are looking for? <input type = "text" name = "name" /></p>
-    <p><input class="btn btn-primary" type = "submit" value = "Submit" /></p>
+
+<form action="/shops/<name>/ratings" method="POST">
+    <div align="center" class="container w-50 form-group mx-auto pt-5">
+        <p style="color:white">What is the name of the shop you are looking for? <input type = "text" class="form-control" placeholder="Search here" name = "name" /></p>
+        <p><input class="btn btn-lg btn-secondary fw-bold border-white bg-white text-black" type = "submit" value = "Submit" /></p>
+    </div>
 </form>
-</div>
+
 {% endblock %}
