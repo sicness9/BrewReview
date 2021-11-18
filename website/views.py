@@ -1,3 +1,4 @@
+import flask_login
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
 from sqlalchemy.sql import func
@@ -56,15 +57,35 @@ def add_user():
     return {'id': user.id}
 
 
-# delete a user id
-@views.route('/users/<id>', methods=['DELETE'])
-def del_user(id):
-    user = User.query.get(id)
-    if user is None:
+#delete request
+@views.route('/account/delete-request', methods=['GET', 'POST'])
+def del_account_request():
+    if request.method == 'POST':
+        return render_template(url_for('views.del_user'))
+    return render_template("userDeleteRequest.html", user=current_user)
+
+
+# delete account
+@views.route('/account/account_delete', methods=['POST', 'DELETE'])
+def del_user():
+    email = request.form.get('email')
+    if email is None:
         return {"Error": "404 Not Found"}
+    user = User.query.filter(User.email == request.form.get('email')).first()
+    flask_login.logout_user()
     db.session.delete(user)
     db.session.commit()
-    return {"Message": "Account Deleted"}
+    if request.method == 'DELETE':
+        return render_template(url_for('views.acc_deleted_view'))
+    return render_template('accountDeleted.html', user=current_user)
+
+"""
+@views.route('/account/deleted', methods=['GET'])
+def acc_deleted_view():
+    return render_template('accountDeleted.html', user=current_user)"""
+
+
+
 
 
 ######### begin coffee shops section #########
