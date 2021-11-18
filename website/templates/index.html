@@ -1,15 +1,27 @@
 {% extends "base.html" %}
 {% block title %} Main Page {% endblock %}
 {% block content%}
-<div class="container-fluid">
+<div class="container w-50 form-group mx-auto pt-5">
     <h1 style="color:white; font-size=300%;">Welcome to our user index </h1>
 
 </div>
 
-<div class="container" align="left" >
-    <p > Our current users </p>
-    {% for user in lstOfUsers %}
-    <p style="color:white"> {{ user.name }}</p>
-    {% endfor %}
+<div class="table-responsive-lg mx-auto pt-5">
+<table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in lstOfUsers %}
+    <tr>
+        <td scope="row">{{ user.name }}</td>
+        <td scrop="row">{{ user.email }} </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 </div>
 {% endblock%}
