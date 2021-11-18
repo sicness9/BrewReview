@@ -1,8 +1,22 @@
 {% extends "base.html" %}
 {% block title %} Main Page {% endblock %}
 {% block content%}
-<div class="container-fluid">
-    <h1 style="color:white; font-size=300%;">Welcome to the Coffee Lovers! </h1>
-    <div style="color:white">There are currently {{users}} registered users, join us today!</div>
+<div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+            <h3 class="float-md-start mb-0 text-lg-center">
+                Welcome to the Coffee Lovers!
+            </h3>
+    </header>
+    <div class="container overflow-hidden">
+            <main class="px-3">
+                <p class="text-lg-center font-weight-normal">
+                    There are currently {{users}} active coffee enthusiasts using this app.
+                    Get started and join us now by hitting the button below!
+                </p>
+                <p align="center" class="lead">
+                    <a href="/signup" class="btn btn-primary btn-lg fw-bold border-white bg-dark ">Get Started</a>
+                </p>
+            </main>
+    </div>
 </div>
 {% endblock%}
