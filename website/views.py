@@ -1,11 +1,14 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
+from sqlalchemy.sql import func
+
 from . import db
 from .models import User, Shops, locationsTable
+from sqlalchemy.sql import func
 
 views = Blueprint('views', __name__)
 
-
+#Cover page
 @views.route('/')
 def main():
     users = len(User.query.all())
@@ -20,7 +23,7 @@ def home():
 
 
 # index page
-@views.route('/index')
+@views.route('/user_index')
 def index():
     count = len(User.query.all())
     people = User.query.all()
@@ -67,35 +70,36 @@ def del_user(id):
 ######### begin coffee shops section #########
 
 # view the shop location index
-@views.route('/shops')
+@views.route('/shops', methods=['GET', 'POST'])
 def shop_index():
     count = len(Shops.query.all())
-    shops = Shops.query.all()
+    if request.method == 'GET':
+        return render_template("shopIndex.html", shops=count, user=current_user)
+    if request.method == 'POST':
+        name = request.form.get('name')
+        return render_template(url_for('views.shop_rating', name=name), user=current_user)
 
-    #this section is a work in progress, trying to grab all the shops with duplicate names and average their ratings
-    #to display on the shop index page. Trying to figure out how to enter raw SQL using SQLAlchemy, it's not cooperating :)
-    """
-    for line in shops:
-        name = db.session.fetchone()[1]
 
-        db.session.execute("SELECT count from Shops WHERE name = ?", (name,))
-        row = db.session.fetchone()
-        if row is None:
-            db.session.execute('INSERT INTO Shops (name, count) VALUES (?,1)', (name,))
-        else:
-            db.session.execute('UPDATE Shops SET  count = count + 1 WHERE name = ?', (name,))
-        db.session.commit()
+#user can search for a coffee shop and view the total average ratings
+@views.route('/shops/<name>/ratings', methods=['GET', 'POST'])
+def shop_rating(name):
+    name = request.form.get('name')
+    averageCheck = db.session.query(func.avg(Shops.rating).label('Average Rating')).filter(Shops.name == name)
+    averageRating = find_average(averageCheck)
 
-    sqlstr = 'SELECT name, count FROM Shops ORDER BY count'
+    return render_template('shopQuery.html', user=current_user, averageRating=averageRating, name=name)
 
-    for row in db.execute(sqlstr):
-        row = str(row[0], row[1])
-        print(row)"""
-    return render_template("shopIndex.html", shops=count, lstOfShops=shops, user=current_user)
 
+#function to clean up the results of the SQL query
+def find_average(averageCheck):
+    for i in averageCheck:
+        numReplace = str(i).replace('(', ',')
+        numSplit = numReplace.strip(',')
+        avg = numSplit[:3]
+        return avg
 
 #add new shops via JSON
-@views.route('/shops', methods=['POST'])
+@views.route('/shops/JSON', methods=['POST'])
 def add_shop():
     shop = Shops(name=request.json['name'], rating=request.json['rating'], loc_id=request.json['loc_id'])
     db.session.add(shop)
@@ -107,33 +111,22 @@ def add_shop():
 @views.route("/form_shops", methods=['GET', 'POST'])
 def shop_form():
     if request.method == 'POST':
-        return render_template(url_for('views.shop_added'))
+        return render_template(url_for('views.shop_add'))
     return render_template("shopAddForm.html", user=current_user)
 
 
-#idea for adding/rating
-#ask for name of the shops then query DB to see if it exists
-#if exists prompt for a rating and then add the rating to rating column
-#maybe set rating column to be a list of ratings and then get the average rating
-@views.route('/shop_added', methods=['GET', 'POST'])
+@views.route('/shop_add', methods=['GET', 'POST'])
 @login_required
-def shop_add_step1():
-    form_data = request.form
+def shop_add():
     name = request.form.get('name')
+    form_data = request.form
     rating = request.form.get('rating')
     user_id = current_user.get_id()
-
     new_shop = Shops(name=name, rating=rating, user_id=user_id)
-
     db.session.add(new_shop)
     db.session.commit()
     return render_template('shopAdded.html', form_data=form_data, user=current_user)
 
-""" WIP
-@views.route('/shops_add_first_step', methods=['GET', 'POST'])
-@login_required
-def shop_add_step2():
-"""
 
 # delete a shop id
 @views.route('/shops/<id>', methods=['DELETE'])
