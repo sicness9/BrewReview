@@ -1,22 +1,26 @@
 {% extends "base.html" %}
-{% block title %} Main Page {% endblock %}
-{% block content%}
-<div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto">
-            <h3 class="float-md-start mb-0 text-lg-center">
-                Welcome to the Coffee Lovers!
-            </h3>
-    </header>
-    <div class="container overflow-hidden">
-            <main class="px-3">
-                <p class="text-lg-center font-weight-normal">
-                    There are currently {{users}} active coffee enthusiasts using this app.
-                    Get started and join us now by hitting the button below!
-                </p>
-                <p align="center" class="lead">
-                    <a href="/signup" class="btn btn-primary btn-lg fw-bold border-white bg-dark ">Get Started</a>
-                </p>
-            </main>
-    </div>
+{% block title %} Cover Page {% endblock %}
+
+{% block content %}
+<div class="container h-25"></div>
+<body class="d-flex h-100 text-center text-white bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+<header class="mb-5">
+</header>
+      <main class="px-3">
+            {% if user.is_authenticated %}
+                <h1>Welcome back to BrewReview.</h1>
+                <p>Ready for some more coffee?</p>
+                  <a href="/home" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-black">Get Started</a>
+            {% else %}
+                <h1>Welcome to BrewReview.</h1>
+                <p class="lead">There are currently {{users}} active coffee enthusiasts using this app.
+                    Get started and join us now by hitting the button below!</p>
+                <p class="lead">
+                    <a href="/signup" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-black">Get Started</a>
+            {% endif %}
+          </p>
+         </main>
 </div>
-{% endblock%}
+</body>
+{% endblock %}
