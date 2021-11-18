@@ -40,9 +40,3 @@ def create_database(app):
     if not path.exists('website' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
-
-
-#function to calculate the rating for coffee shops
-def calculate_rating(rating):
-    stars = [1,2,3,4,5]
-    return round(sum(list(map(lambda a,b: a*b, stars, rating_list))) / sum(rating_list), 2)
