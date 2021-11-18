@@ -47,6 +47,8 @@ def sign_up():
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first() #check if email already exists in DB
+
+        #password and email verification checks
         if user:
             flash('This email already exists', category='error')
         elif len(email) < 4:
@@ -58,13 +60,14 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password is too short', category='error')
         else:
+            #enter the give information into new_user and then add to DB
             new_user = User(email=email, name=name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+            #log in the user after account is created
             login_user(new_user, remember=True, force=True)
             flash('Account created successfully!', category='success')
-            return redirect(url_for('views.home'))
-
+            return redirect(url_for('views.home')) #redirect to the user home page
     return render_template('signup.html', user=current_user)
 
 

@@ -19,11 +19,12 @@ def main():
 @views.route('/home')
 @login_required
 def home():
+    # query for the shops the signed in user has added/rated
     shops = Shops.query.filter(Shops.user_id == (current_user.get_id()))
     return render_template('home.html', user=current_user, shops=shops)
 
 
-# index page
+#user index page
 @views.route('/user_index')
 def index():
     count = len(User.query.all())
@@ -31,7 +32,7 @@ def index():
     return render_template("index.html", users=count, lstOfUsers=people, user=current_user)
 
 
-# list all of current users
+#about us page
 @views.route('/aboutus')
 def about_us():
     return render_template("aboutus.html", user=current_user)
@@ -71,8 +72,9 @@ def del_user():
     email = request.form.get('email')
     if email is None:
         return {"Error": "404 Not Found"}
+    #query DB to look for the entered email from the form and and assign to user object
     user = User.query.filter(User.email == request.form.get('email')).first()
-    flask_login.logout_user()
+    flask_login.logout_user() #log out the user before deletion
     db.session.delete(user)
     db.session.commit()
     if request.method == 'DELETE':
@@ -86,7 +88,7 @@ def del_user():
 # view the shop location index
 @views.route('/shops', methods=['GET', 'POST'])
 def shop_index():
-    count = len(Shops.query.all())
+    count = len(Shops.query.all()) #grab the number of shops in the db
     if request.method == 'GET':
         return render_template("shopIndex.html", shops=count, user=current_user)
     if request.method == 'POST':
@@ -98,9 +100,9 @@ def shop_index():
 @views.route('/shops/<name>/ratings', methods=['GET', 'POST'])
 def shop_rating(name):
     name = request.form.get('name')
+    #SQL query will search for all entries of the entered shop name and grab all the ratings values and average them out
     averageCheck = db.session.query(func.avg(Shops.rating).label('Average Rating')).filter(Shops.name == name)
     averageRating = find_average(averageCheck)
-
     return render_template('shopQuery.html', user=current_user, averageRating=averageRating, name=name)
 
 
@@ -111,6 +113,7 @@ def find_average(averageCheck):
         numSplit = numReplace.strip(',')
         avg = numSplit[:3]
         return avg
+
 
 #add new shops via JSON
 @views.route('/shops/JSON', methods=['POST'])
@@ -129,6 +132,7 @@ def shop_form():
     return render_template("shopAddForm.html", user=current_user)
 
 
+#function will take all entered information from shop_form() and add to DB
 @views.route('/shop_add', methods=['GET', 'POST'])
 @login_required
 def shop_add():
@@ -142,7 +146,7 @@ def shop_add():
     return render_template('shopAdded.html', form_data=form_data, user=current_user)
 
 
-# delete a shop id
+# delete a shop id // not available to end user in the app, do not want to delete too many shops
 @views.route('/shops/<id>', methods=['DELETE'])
 def del_shop(id):
     shop = Shops.query.get(id)

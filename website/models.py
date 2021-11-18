@@ -1,7 +1,6 @@
 from . import db
 from flask_login import UserMixin
 
-#db.Model.metadata.reflect(db.engine)
 
 # helper table
 locationsTable = db.Table('locations',
