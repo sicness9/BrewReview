@@ -79,13 +79,6 @@ def del_user():
         return render_template(url_for('views.acc_deleted_view'))
     return render_template('accountDeleted.html', user=current_user)
 
-"""
-@views.route('/account/deleted', methods=['GET'])
-def acc_deleted_view():
-    return render_template('accountDeleted.html', user=current_user)"""
-
-
-
 
 
 ######### begin coffee shops section #########
