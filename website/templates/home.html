@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% block title %} Home {% endblock %}
+{% block title %} User Home {% endblock %}
 {% block content%}
-<div align="center" class="container-fluid">
-    <h1 style="color:white; font-size=300%;">This is your home page!</h1>
+<div class="container w-50 form-group mx-auto pt-5">
+    <h1 style="color:white; font-size=300%;">{{ user.name }}'s favorite coffee shops</h1>
 
 </div>
 
-<h1 align="center">{{ user.name }}'s favorite coffee shops</h1>
-
-<div align="center" class="container">
-  <div class="row">
-    <div class="col" ><b>Store</b></div>
-    <div class="col"><b>Rating</b></div>
-    <div class="w-100"></div>
-    <div class="col">
-        {% for shop in shops %}
-            <p style="color:white"> {{ shop.name }}</p>
-        {% endfor %}</div>
-    <div class="col">
-        {% for shop in shops %}
-            <p style="color:white"> {{ shop.rating }}</p>
-        {% endfor %}
-    </div>
-  </div>
+<div class="table-responsive-lg mx-auto pt-5">
+<table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Coffee Shop</th>
+      <th scope="col">Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for shop in shops %}
+    <tr>
+        <td scope="row">{{ shop.name }}</td>
+        <td scrop="row">{{ shop.rating }} </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 </div>
 {% endblock %}
