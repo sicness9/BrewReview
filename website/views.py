@@ -60,6 +60,7 @@ def add_user():
 
 #delete request
 @views.route('/account/delete-request', methods=['GET', 'POST'])
+@login_required
 def del_account_request():
     if request.method == 'POST':
         return render_template(url_for('views.del_user'))
@@ -67,16 +68,22 @@ def del_account_request():
 
 
 # delete account
-@views.route('/account/account_delete', methods=['POST', 'DELETE'])
+@views.route('/account/account_delete', methods=['GET','POST', 'DELETE'])
+@login_required
 def del_user():
     email = request.form.get('email')
+
     if email is None:
         return {"Error": "404 Not Found"}
+    if request.form.get('email') != current_user.email:
+        flash("Email does not match. Try again.", category='error')
+        return render_template("userDeleteRequest.html", user=current_user)
     #query DB to look for the entered email from the form and and assign to user object
     user = User.query.filter(User.email == request.form.get('email')).first()
     flask_login.logout_user() #log out the user before deletion
     db.session.delete(user)
     db.session.commit()
+
     if request.method == 'DELETE':
         return render_template(url_for('views.acc_deleted_view'))
     return render_template('accountDeleted.html', user=current_user)

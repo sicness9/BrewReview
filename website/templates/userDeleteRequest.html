@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block title %} User Home {% endblock %}
 {% block content%}
+<div class="container h-25"></div>
 <h1> Are you sure you want to delete your account? </h1>
+<div class="container w-50 form-group mx-auto pt-5">
 <form action="{{ url_for('views.del_user') }}" method = "POST">
-    <p style="color:white">Enter your email to confirm. <input type = "text" name = "email" /></p>
-    <p><input class="btn btn-primary" type = "submit" value = "Confirm" /></p>
+    <p><b> {{ user.email }} </b></p>
+    <label class="form-label">Enter your email to confirm deletion: </label>
+        <p><input type="text"  placeholder="{{ user.email }}" name="email"/></p>
+    <p><input class="btn btn-danger" type = "submit" value = "Delete" /></p>
 </form>
+</div>
 {% endblock %}
